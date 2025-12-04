@@ -171,13 +171,12 @@ class WebSocketServer {
         // Находим userId по socketId
         let disconnectedUserId: number | null = null;
 
-        for (const [userId, socketId] of connectedUsers.entries()) {
+        connectedUsers.forEach((socketId, userId) => {
           if (socketId === socket.id) {
             disconnectedUserId = userId;
             connectedUsers.delete(userId);
-            break;
           }
-        }
+        });
 
         if (disconnectedUserId) {
           console.log(`🔌 Пользователь отключился: ${socket.id}`);
