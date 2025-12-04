@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Тест создания чата</title>
+  </head>
+  <body style="padding: 20px; font-family: Arial">
+    <h1>Тестирование создания чата</h1>
+
+    <div
+      style="
+        margin-bottom: 20px;
+        padding: 15px;
+        background: #f0f0f0;
+        border-radius: 5px;
+      "
+    >
+      <h3>Тест 1: JSON запрос</h3>
+      <input type="number" id="friendId1" placeholder="ID друга" value="2" />
+      <button onclick="testJSON()">Тест JSON API</button>
+      <div id="result1" style="margin-top: 10px"></div>
+    </div>
+
+    <div
+      style="
+        margin-bottom: 20px;
+        padding: 15px;
+        background: #f0f0f0;
+        border-radius: 5px;
+      "
+    >
+      <h3>Тест 2: Новый тестовый API</h3>
+      <input type="number" id="friendId2" placeholder="ID друга" value="2" />
+      <button onclick="testNewAPI()">Тест нового API</button>
+      <div id="result2" style="margin-top: 10px"></div>
+    </div>
+
+    <div
+      style="
+        margin-bottom: 20px;
+        padding: 15px;
+        background: #f0f0f0;
+        border-radius: 5px;
+      "
+    >
+      <h3>Тест 3: Query параметры</h3>
+      <input type="number" id="friendId3" placeholder="ID друга" value="2" />
+      <button onclick="testQuery()">Тест с Query</button>
+      <div id="result3" style="margin-top: 10px"></div>
+    </div>
+
+    <script>
+      async function testJSON() {
+        const friendId = document.getElementById("friendId1").value;
+        const resultDiv = document.getElementById("result1");
+
+        resultDiv.innerHTML = "Отправляю запрос...";
+
+        try {
+          const response = await fetch("/api/private-chats", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ friend_id: parseInt(friendId) }),
+          });
+
+          const data = await response.json();
+
+          resultDiv.innerHTML = `
+                    <strong>Статус:</strong> ${response.status}<br>
+                    <strong>Ответ:</strong><br>
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
+                `;
+        } catch (error) {
+          resultDiv.innerHTML = `Ошибка: ${error.message}`;
+        }
+      }
+
+      async function testNewAPI() {
+        const friendId = document.getElementById("friendId2").value;
+        const resultDiv = document.getElementById("result2");
+
+        resultDiv.innerHTML = "Отправляю запрос...";
+
+        try {
+          const response = await fetch("/api/test-create-chat", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ friend_id: parseInt(friendId) }),
+          });
+
+          const data = await response.json();
+
+          resultDiv.innerHTML = `
+                    <strong>Статус:</strong> ${response.status}<br>
+                    <strong>Ответ:</strong><br>
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
+                `;
+        } catch (error) {
+          resultDiv.innerHTML = `Ошибка: ${error.message}`;
+        }
+      }
+
+      async function testQuery() {
+        const friendId = document.getElementById("friendId3").value;
+        const resultDiv = document.getElementById("result3");
+
+        resultDiv.innerHTML = "Отправляю запрос...";
+
+        try {
+          const response = await fetch(
+            `/api/test-create-chat?friend_id=${friendId}`,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+            }
+          );
+
+          const data = await response.json();
+
+          resultDiv.innerHTML = `
+                    <strong>Статус:</strong> ${response.status}<br>
+                    <strong>Ответ:</strong><br>
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
+                `;
+        } catch (error) {
+          resultDiv.innerHTML = `Ошибка: ${error.message}`;
+        }
+      }
+    </script>
+  </body>
+</html>
